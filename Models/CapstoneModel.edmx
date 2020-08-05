@@ -1,0 +1,526 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CapstoneModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Disease">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DiseaseName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="DiseaseSymptom">
+          <Key>
+            <PropertyRef Name="DiseaseId" />
+            <PropertyRef Name="SymptomId" />
+          </Key>
+          <Property Name="DiseaseId" Type="int" Nullable="false" />
+          <Property Name="SymptomId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DoctorFirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DoctorLastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PracticeCity" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PracticeZip" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="PracticePhone" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DoctorDisease">
+          <Key>
+            <PropertyRef Name="DoctorTypeId" />
+            <PropertyRef Name="DiseaseId" />
+          </Key>
+          <Property Name="DoctorTypeId" Type="int" Nullable="false" />
+          <Property Name="DiseaseId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DoctorType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FamilyLink">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InitiatingId" Type="int" Nullable="false" />
+          <Property Name="ReceivingProfileId" Type="int" Nullable="false" />
+          <Property Name="IsApproved" Type="bit" Nullable="false" />
+          <Property Name="RelationshipType" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Symptom">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SymptomName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="StreetAddress" Type="nvarchar" MaxLength="128" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="StateAbrev" Type="nvarchar" MaxLength="10" />
+          <Property Name="Zipcode" Type="nvarchar" MaxLength="10" />
+          <Property Name="Birthdate" Type="date" />
+        </EntityType>
+        <EntityType Name="UserProfileDisease">
+          <Key>
+            <PropertyRef Name="UserProfileId" />
+            <PropertyRef Name="DiseaseId" />
+          </Key>
+          <Property Name="UserProfileId" Type="int" Nullable="false" />
+          <Property Name="DiseaseId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__DiseaseSy__Disea__2E1BDC42">
+          <End Role="Disease" Type="Self.Disease" Multiplicity="1" />
+          <End Role="DiseaseSymptom" Type="Self.DiseaseSymptom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Disease">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DiseaseSymptom">
+              <PropertyRef Name="DiseaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DiseaseSy__Sympt__2F10007B">
+          <End Role="Symptom" Type="Self.Symptom" Multiplicity="1" />
+          <End Role="DiseaseSymptom" Type="Self.DiseaseSymptom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Symptom">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DiseaseSymptom">
+              <PropertyRef Name="SymptomId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Doctor__TypeId__37A5467C">
+          <End Role="DoctorType" Type="Self.DoctorType" Multiplicity="1" />
+          <End Role="Doctor" Type="Self.Doctor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DoctorType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Doctor">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DoctorDis__Disea__3B75D760">
+          <End Role="Disease" Type="Self.Disease" Multiplicity="1" />
+          <End Role="DoctorDisease" Type="Self.DoctorDisease" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Disease">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DoctorDisease">
+              <PropertyRef Name="DiseaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DoctorDis__Docto__3A81B327">
+          <End Role="DoctorType" Type="Self.DoctorType" Multiplicity="1" />
+          <End Role="DoctorDisease" Type="Self.DoctorDisease" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DoctorType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DoctorDisease">
+              <PropertyRef Name="DoctorTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FamilyLin__Initi__267ABA7A">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="FamilyLink" Type="Self.FamilyLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FamilyLink">
+              <PropertyRef Name="InitiatingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FamilyLin__Recei__276EDEB3">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="FamilyLink" Type="Self.FamilyLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FamilyLink">
+              <PropertyRef Name="ReceivingProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserProfi__Disea__32E0915F">
+          <End Role="Disease" Type="Self.Disease" Multiplicity="1" />
+          <End Role="UserProfileDisease" Type="Self.UserProfileDisease" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Disease">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfileDisease">
+              <PropertyRef Name="DiseaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserProfi__UserP__31EC6D26">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="UserProfileDisease" Type="Self.UserProfileDisease" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfileDisease">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CapstoneModelStoreContainer">
+          <EntitySet Name="Disease" EntityType="Self.Disease" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DiseaseSymptom" EntityType="Self.DiseaseSymptom" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Doctor" EntityType="Self.Doctor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DoctorDisease" EntityType="Self.DoctorDisease" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DoctorType" EntityType="Self.DoctorType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FamilyLink" EntityType="Self.FamilyLink" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Symptom" EntityType="Self.Symptom" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfileDisease" EntityType="Self.UserProfileDisease" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__DiseaseSy__Disea__2E1BDC42" Association="Self.FK__DiseaseSy__Disea__2E1BDC42">
+            <End Role="Disease" EntitySet="Disease" />
+            <End Role="DiseaseSymptom" EntitySet="DiseaseSymptom" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DiseaseSy__Sympt__2F10007B" Association="Self.FK__DiseaseSy__Sympt__2F10007B">
+            <End Role="Symptom" EntitySet="Symptom" />
+            <End Role="DiseaseSymptom" EntitySet="DiseaseSymptom" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Doctor__TypeId__37A5467C" Association="Self.FK__Doctor__TypeId__37A5467C">
+            <End Role="DoctorType" EntitySet="DoctorType" />
+            <End Role="Doctor" EntitySet="Doctor" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DoctorDis__Disea__3B75D760" Association="Self.FK__DoctorDis__Disea__3B75D760">
+            <End Role="Disease" EntitySet="Disease" />
+            <End Role="DoctorDisease" EntitySet="DoctorDisease" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DoctorDis__Docto__3A81B327" Association="Self.FK__DoctorDis__Docto__3A81B327">
+            <End Role="DoctorType" EntitySet="DoctorType" />
+            <End Role="DoctorDisease" EntitySet="DoctorDisease" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FamilyLin__Initi__267ABA7A" Association="Self.FK__FamilyLin__Initi__267ABA7A">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="FamilyLink" EntitySet="FamilyLink" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FamilyLin__Recei__276EDEB3" Association="Self.FK__FamilyLin__Recei__276EDEB3">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="FamilyLink" EntitySet="FamilyLink" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserProfi__Disea__32E0915F" Association="Self.FK__UserProfi__Disea__32E0915F">
+            <End Role="Disease" EntitySet="Disease" />
+            <End Role="UserProfileDisease" EntitySet="UserProfileDisease" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserProfi__UserP__31EC6D26" Association="Self.FK__UserProfi__UserP__31EC6D26">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="UserProfileDisease" EntitySet="UserProfileDisease" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CapstoneModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Disease">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DiseaseName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Symptoms" Relationship="Self.DiseaseSymptom" FromRole="Disease" ToRole="Symptom" />
+          <NavigationProperty Name="DoctorTypes" Relationship="Self.DoctorDisease" FromRole="Disease" ToRole="DoctorType" />
+          <NavigationProperty Name="UserProfiles" Relationship="Self.UserProfileDisease" FromRole="Disease" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DoctorFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DoctorLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PracticeCity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PracticeZip" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PracticePhone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DoctorType" Relationship="Self.FK__Doctor__TypeId__37A5467C" FromRole="Doctor" ToRole="DoctorType" />
+        </EntityType>
+        <EntityType Name="DoctorType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Doctors" Relationship="Self.FK__Doctor__TypeId__37A5467C" FromRole="DoctorType" ToRole="Doctor" />
+          <NavigationProperty Name="Diseases" Relationship="Self.DoctorDisease" FromRole="DoctorType" ToRole="Disease" />
+        </EntityType>
+        <EntityType Name="FamilyLink">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InitiatingId" Type="Int32" Nullable="false" />
+          <Property Name="ReceivingProfileId" Type="Int32" Nullable="false" />
+          <Property Name="IsApproved" Type="Boolean" Nullable="false" />
+          <Property Name="RelationshipType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="UserProfile" Relationship="Self.FK__FamilyLin__Initi__267ABA7A" FromRole="FamilyLink" ToRole="UserProfile" />
+          <NavigationProperty Name="UserProfile1" Relationship="Self.FK__FamilyLin__Recei__276EDEB3" FromRole="FamilyLink" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="Symptom">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SymptomName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Diseases" Relationship="Self.DiseaseSymptom" FromRole="Symptom" ToRole="Disease" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="StreetAddress" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StateAbrev" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Zipcode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Birthdate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="FamilyLinks" Relationship="Self.FK__FamilyLin__Initi__267ABA7A" FromRole="UserProfile" ToRole="FamilyLink" />
+          <NavigationProperty Name="FamilyLinks1" Relationship="Self.FK__FamilyLin__Recei__276EDEB3" FromRole="UserProfile" ToRole="FamilyLink" />
+          <NavigationProperty Name="Diseases" Relationship="Self.UserProfileDisease" FromRole="UserProfile" ToRole="Disease" />
+        </EntityType>
+        <Association Name="FK__Doctor__TypeId__37A5467C">
+          <End Role="DoctorType" Type="Self.DoctorType" Multiplicity="1" />
+          <End Role="Doctor" Type="Self.Doctor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DoctorType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Doctor">
+              <PropertyRef Name="TypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FamilyLin__Initi__267ABA7A">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="FamilyLink" Type="Self.FamilyLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FamilyLink">
+              <PropertyRef Name="InitiatingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FamilyLin__Recei__276EDEB3">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="FamilyLink" Type="Self.FamilyLink" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FamilyLink">
+              <PropertyRef Name="ReceivingProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DiseaseSymptom">
+          <End Role="Disease" Type="Self.Disease" Multiplicity="*" />
+          <End Role="Symptom" Type="Self.Symptom" Multiplicity="*" />
+        </Association>
+        <Association Name="DoctorDisease">
+          <End Role="Disease" Type="Self.Disease" Multiplicity="*" />
+          <End Role="DoctorType" Type="Self.DoctorType" Multiplicity="*" />
+        </Association>
+        <Association Name="UserProfileDisease">
+          <End Role="Disease" Type="Self.Disease" Multiplicity="*" />
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="CapstoneEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Diseases" EntityType="Self.Disease" />
+          <EntitySet Name="Doctors" EntityType="Self.Doctor" />
+          <EntitySet Name="DoctorTypes" EntityType="Self.DoctorType" />
+          <EntitySet Name="FamilyLinks" EntityType="Self.FamilyLink" />
+          <EntitySet Name="Symptoms" EntityType="Self.Symptom" />
+          <EntitySet Name="UserProfiles" EntityType="Self.UserProfile" />
+          <AssociationSet Name="FK__Doctor__TypeId__37A5467C" Association="Self.FK__Doctor__TypeId__37A5467C">
+            <End Role="DoctorType" EntitySet="DoctorTypes" />
+            <End Role="Doctor" EntitySet="Doctors" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FamilyLin__Initi__267ABA7A" Association="Self.FK__FamilyLin__Initi__267ABA7A">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="FamilyLink" EntitySet="FamilyLinks" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FamilyLin__Recei__276EDEB3" Association="Self.FK__FamilyLin__Recei__276EDEB3">
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+            <End Role="FamilyLink" EntitySet="FamilyLinks" />
+          </AssociationSet>
+          <AssociationSet Name="DiseaseSymptom" Association="Self.DiseaseSymptom">
+            <End Role="Disease" EntitySet="Diseases" />
+            <End Role="Symptom" EntitySet="Symptoms" />
+          </AssociationSet>
+          <AssociationSet Name="DoctorDisease" Association="Self.DoctorDisease">
+            <End Role="Disease" EntitySet="Diseases" />
+            <End Role="DoctorType" EntitySet="DoctorTypes" />
+          </AssociationSet>
+          <AssociationSet Name="UserProfileDisease" Association="Self.UserProfileDisease">
+            <End Role="Disease" EntitySet="Diseases" />
+            <End Role="UserProfile" EntitySet="UserProfiles" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CapstoneModelStoreContainer" CdmEntityContainer="CapstoneEntities1">
+          <EntitySetMapping Name="Diseases">
+            <EntityTypeMapping TypeName="CapstoneModel.Disease">
+              <MappingFragment StoreEntitySet="Disease">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DiseaseName" ColumnName="DiseaseName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Doctors">
+            <EntityTypeMapping TypeName="CapstoneModel.Doctor">
+              <MappingFragment StoreEntitySet="Doctor">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DoctorFirstName" ColumnName="DoctorFirstName" />
+                <ScalarProperty Name="DoctorLastName" ColumnName="DoctorLastName" />
+                <ScalarProperty Name="PracticeCity" ColumnName="PracticeCity" />
+                <ScalarProperty Name="PracticeZip" ColumnName="PracticeZip" />
+                <ScalarProperty Name="PracticePhone" ColumnName="PracticePhone" />
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DoctorTypes">
+            <EntityTypeMapping TypeName="CapstoneModel.DoctorType">
+              <MappingFragment StoreEntitySet="DoctorType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FamilyLinks">
+            <EntityTypeMapping TypeName="CapstoneModel.FamilyLink">
+              <MappingFragment StoreEntitySet="FamilyLink">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="InitiatingId" ColumnName="InitiatingId" />
+                <ScalarProperty Name="ReceivingProfileId" ColumnName="ReceivingProfileId" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="RelationshipType" ColumnName="RelationshipType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Symptoms">
+            <EntityTypeMapping TypeName="CapstoneModel.Symptom">
+              <MappingFragment StoreEntitySet="Symptom">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SymptomName" ColumnName="SymptomName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfiles">
+            <EntityTypeMapping TypeName="CapstoneModel.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="StreetAddress" ColumnName="StreetAddress" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="StateAbrev" ColumnName="StateAbrev" />
+                <ScalarProperty Name="Zipcode" ColumnName="Zipcode" />
+                <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="DiseaseSymptom" TypeName="CapstoneModel.DiseaseSymptom" StoreEntitySet="DiseaseSymptom">
+            <EndProperty Name="Disease">
+              <ScalarProperty Name="Id" ColumnName="DiseaseId" />
+            </EndProperty>
+            <EndProperty Name="Symptom">
+              <ScalarProperty Name="Id" ColumnName="SymptomId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="DoctorDisease" TypeName="CapstoneModel.DoctorDisease" StoreEntitySet="DoctorDisease">
+            <EndProperty Name="Disease">
+              <ScalarProperty Name="Id" ColumnName="DiseaseId" />
+            </EndProperty>
+            <EndProperty Name="DoctorType">
+              <ScalarProperty Name="Id" ColumnName="DoctorTypeId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="UserProfileDisease" TypeName="CapstoneModel.UserProfileDisease" StoreEntitySet="UserProfileDisease">
+            <EndProperty Name="Disease">
+              <ScalarProperty Name="Id" ColumnName="DiseaseId" />
+            </EndProperty>
+            <EndProperty Name="UserProfile">
+              <ScalarProperty Name="Id" ColumnName="UserProfileId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

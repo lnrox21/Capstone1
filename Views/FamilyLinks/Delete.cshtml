@@ -1,0 +1,56 @@
+﻿@model Capstone1.Models.FamilyLink
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>FamilyLink</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IsApproved)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsApproved)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RelationshipType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RelationshipType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserProfile.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserProfile.UserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserProfile1.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserProfile1.UserId)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

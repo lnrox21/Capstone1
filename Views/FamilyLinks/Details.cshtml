@@ -1,0 +1,50 @@
+﻿@model Capstone1.Models.FamilyLink
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>FamilyLink</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IsApproved)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsApproved)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RelationshipType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RelationshipType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserProfile.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserProfile.UserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserProfile1.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserProfile1.UserId)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
